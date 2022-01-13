@@ -1,0 +1,29 @@
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: "jenkins-master-deployment"
+    labels: 
+      app: jenkins-master
+    namespace: "jenkins"
+  spec:
+    replicas: 1
+    selector:
+        matchLabels:
+          app: "jenkins-master"
+    template:
+      metadata:
+        labels:
+          app: "jenkins-master"
+      spec:
+        containers:
+          - name: "jenkins-master"
+            image: "devopsleaner/jenkins-master:latest"
+            imagePullPolicy: "IfNotPresent"
+            env:
+              - name: JAVA_OPTS
+                value: -Djenkins.install.runSetupWizard=false
+            ports:
+              - name: http-port
+                containerPort: 8080
+              - name: jnlp
+                containerPort: 50000         
